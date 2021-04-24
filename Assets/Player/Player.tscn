@@ -74,7 +74,7 @@ region_rect = Rect2( 0, 0, 151, 89 )
 [node name="Legs" type="Sprite" parent="Model/Body"]
 light_mask = 0
 position = Vector2( -41.2725, 19.8425 )
-rotation = -0.019571
+rotation = 0.24149
 texture = ExtResource( 1 )
 offset = Vector2( -48, -8 )
 region_enabled = true
@@ -84,7 +84,7 @@ region_rect = Rect2( 13, 91, 118, 73 )
 modulate = Color( 0.584314, 0.584314, 0.584314, 1 )
 light_mask = 0
 position = Vector2( -30.49, 11.0205 )
-rotation = 0.0439156
+rotation = -0.209118
 z_index = -2
 texture = ExtResource( 1 )
 offset = Vector2( -48, -8 )

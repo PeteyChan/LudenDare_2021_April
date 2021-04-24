@@ -6,8 +6,17 @@ class Rock : Node2D
 {
     public Rock()
     {
-        Scene.Current.AddChild(this);
         this.AddChild(GD.Load<PackedScene>("res://Assets/Rocks/Rock.tscn").Instance());
+        Scene.Current.AddChild(this);
+    }
+}
+
+class Depths : Node2D
+{
+    public Depths()
+    {
+        this.AddChild(GD.Load<PackedScene>("res://Assets/Depths/Depths.tscn").Instance());
+        Scene.Current.AddChild(this);
     }
 }
 
@@ -20,6 +29,7 @@ public class Game : Node2D
 
     public override void _Ready()
     {
+        VisualServer.SetDefaultClearColor(Colors.Black);
         HashSet<int2> positions = new HashSet<int2>();
         HashSet<int2> blocked = new HashSet<int2>();
         int2 start = new int2();
@@ -57,18 +67,29 @@ public class Game : Node2D
             }
         }
 
+        int minX = 0, maxX = 0;
         foreach (var position in positions)
         {
             for (int x = position.x - 5; x < position.x + 6; ++x)
                 for(int y = -1; y < 2; ++ y)
             {
+                if (x < minX)
+                    minX = x;
+                if (x > maxX)
+                    maxX = x;
                 var ypos = position.y + y;
-                if (ypos < -100)
-                    continue;
                 if (blocked.Contains(new int2(x, ypos))) continue;
                 new Rock().GlobalPosition = new Vector2(x, -ypos) * block_width;
                 blocked.Add(new int2(x, ypos));
             }
+        }
+
+        for(int x = minX; x < maxX; ++ x)
+        {
+            new Depths().GlobalPosition = new Vector2(x, 100)*block_width;
+            var depth = new Depths();
+            depth.GlobalPosition = new Vector2(x, 0)*block_width;
+            depth.Rotation = Mathf.Pi;
         }
 
         if (!Node.IsInstanceValid(player))
