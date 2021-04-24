@@ -1,0 +1,21 @@
+[gd_scene format=2]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Control" type="Control" parent="."]
+margin_left = 305.0
+margin_top = 133.0
+margin_right = 423.0
+margin_bottom = 165.0
+rect_scale = Vector2( 4.07692, 3.94444 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+margin_right = 128.0
+margin_bottom = 25.0
+text = "This is the Game"
+__meta__ = {
+"_edit_use_anchors_": false
+}
