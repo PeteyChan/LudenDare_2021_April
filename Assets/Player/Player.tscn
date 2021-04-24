@@ -31,6 +31,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [ 0.0, -15.0, 15.0, 0.0 ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("Model/Body/Legs2:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.6, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 1.42247, 11.1761, -17.9526, 1.42247 ]
+}
 
 [node name="Player" type="RigidBody2D"]
 mode = 2
@@ -43,6 +55,7 @@ __meta__ = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 rotation = 1.5708
 shape = SubResource( 2 )
 
@@ -61,6 +74,18 @@ region_rect = Rect2( 0, 0, 151, 89 )
 [node name="Legs" type="Sprite" parent="Model/Body"]
 light_mask = 0
 position = Vector2( -41.2725, 19.8425 )
+rotation = -0.019571
+texture = ExtResource( 1 )
+offset = Vector2( -48, -8 )
+region_enabled = true
+region_rect = Rect2( 13, 91, 118, 73 )
+
+[node name="Legs2" type="Sprite" parent="Model/Body"]
+modulate = Color( 0.584314, 0.584314, 0.584314, 1 )
+light_mask = 0
+position = Vector2( -30.49, 11.0205 )
+rotation = 0.0439156
+z_index = -2
 texture = ExtResource( 1 )
 offset = Vector2( -48, -8 )
 region_enabled = true

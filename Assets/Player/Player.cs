@@ -26,20 +26,27 @@ public class Player : RigidBody2D
     StateMachine statemachine = new StateMachine();
     public TypeMap data = new TypeMap();
 
+
     public override void _EnterTree()
     {
+        if (data.Get<bool>()) return;
+        data.Get<bool>() = true;
+
         instance = this;
         Input.SetMouseMode(Input.MouseMode.Captured);
         statemachine.Change<Player_States.Move>();
 
         data.Set(this as RigidBody2D)
             .Set(this.FindChild<AnimationPlayer>())
-            .Set(new input())
-            .Set(new movespeed { value = 200 })
+            .Set(this.FindChild<Crosshair>())
             .Set(this.FindChild<GunBarrel>())
             .Set(this.FindChild<Arm>())
-            .Set(new oxygen { value = 5 })
+            .Set(new input())
+            .Set<movespeed>(200)
+            .Set<oxygen>(5)
             ;
+
+        data.Get<Crosshair>().Position= new Vector2(128, 0);
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -153,6 +160,12 @@ namespace Player_States
 
             ref var vel = ref data.Get<Player.move_velocity>();
             vel = vel.value.lerp(inputs.Move * data.Get<Player.movespeed>(), delta);
+
+            var env = data.Get<Player.environment_forces>();
+
+            var rot = (vel.value ).Normalized().y * 20f;
+            var model = body.GetChild(0) as Node2D;
+            model.Rotation = model.Rotation.lerp(Mathf.Deg2Rad(rot), delta * 2f);
 
 
             crosshair.Translate(inputs.Look);

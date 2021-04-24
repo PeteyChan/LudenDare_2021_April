@@ -13,11 +13,6 @@ class Rock : Node2D
 
 public class Game : Node2D
 {
-
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
-
     static float block_width = 128f;
     // Called when the node enters the scene tree for the first time.
 
