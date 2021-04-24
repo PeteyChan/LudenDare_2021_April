@@ -7,8 +7,9 @@ public class Scene : IDispatcher<Events.Bootstrap>
         
     static bool locked = false;
 
+    static Godot.Node _current;
     public static Godot.Node Current {
-        get => Tree.CurrentScene;
+        get => _current;
         set
         {
             if (locked)
@@ -21,8 +22,9 @@ public class Scene : IDispatcher<Events.Bootstrap>
             {
                 locked = true;
                 DispatchManager.Dispatch(new Events.BeforeSceneChange());
-                Tree.Root.AddChild(value);
+                _current = value;
                 Tree.CurrentScene.QueueFree();
+                Tree.Root.AddChild(value);
                 Tree.CurrentScene = value;
                 locked = false;
                 DispatchManager.Dispatch(new Events.AfterSceneChange());
@@ -41,6 +43,7 @@ public class Scene : IDispatcher<Events.Bootstrap>
     public void OnDispatch(Bootstrap args)
     {
         Tree = args.GetTree();
+        _current = Tree.CurrentScene;
     }
 }
 

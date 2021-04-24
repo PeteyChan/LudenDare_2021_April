@@ -11,6 +11,7 @@ public class Crosshair : Sprite
     public override void _Ready()
     {
         this.FindParent<Player>().data.Set(this);
+        this.Position = new Vector2(128, 0);
     }
 //  public override void _Process(float delta)
 //  {
