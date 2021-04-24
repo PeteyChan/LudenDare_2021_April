@@ -9,7 +9,6 @@ class Rock : Node2D
         Scene.Current.AddChild(this);
         this.AddChild(GD.Load<PackedScene>("res://Assets/Rocks/Rock.tscn").Instance());
     }
-
 }
 
 public class Game : Node2D
@@ -30,7 +29,9 @@ public class Game : Node2D
         
         positions.Add(start);
         blocked.Add(start);
-        while (start.y > -100)// && loop < 100)
+        int loop = 0;
+        
+        while (loop < 4)// && loop < 100)
         {
             //loop++;
             switch (Rand.Int(3))
@@ -50,6 +51,12 @@ public class Game : Node2D
             {
                 positions.Add(start);
                 blocked.Add(start);
+            }
+
+            if (start.y == -100)
+            {
+                loop++;
+                start = new int2();
             }
         }
 
