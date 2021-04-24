@@ -27,7 +27,10 @@ public class Player : RigidBody2D
         data.Set(this as RigidBody2D)
             .Set(this.FindChild<AnimationPlayer>())
             .Set(new input())
-            .Set(new movespeed{value = 200});
+            .Set(new movespeed{value = 200})
+            .Set(this.FindChild<GunBarrel>())
+            .Set(this.FindChild<Arm>())
+            ;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,11 +42,19 @@ public class Player : RigidBody2D
         var body = data.Get<Body>();
         var inputs = data.Get<input>();
 
-        crosshair.Translate(data.Get<input>().Look);
+        crosshair.Translate(inputs.Look);
 
         if (crosshair.Transform.origin.x < 0)
             body.Scale = new Vector2(-1, 1);
         else body.Scale = new Vector2(1, 1);
+
+        if (inputs.Fire)
+        {
+            var offset = data.Get<GunBarrel>().GlobalPosition - data.Get<Arm>().GlobalPosition;
+            new Player_Projectile(data.Get<GunBarrel>().GlobalPosition, data.Get<Crosshair>().GlobalPosition + offset);
+            //Debug.Log(data.Get<Crosshair>().Position, data.Get<GunBarrel>().Position);
+        }
+
     }
 
     public override void _PhysicsProcess(float delta)
@@ -65,8 +76,12 @@ public class Player : RigidBody2D
         InputAction look_left = new InputAction(MouseList.left);
         InputAction look_right = new InputAction(MouseList.right);
 
+        InputAction fire = new InputAction(MouseList.left_click, MouseList.right_click);
+
         public Vector2 Move => new Vector2(right - left,  down - up);
         public Vector2 Look => new Vector2(look_right.raw - look_left.raw, look_up.raw - look_down.raw) * look_sensitivity;
+
+        public bool Fire => fire.on_pressed;
 
         public float look_sensitivity = 10f;
 
@@ -124,4 +139,30 @@ namespace Player_States
         }
     }
 
+}
+
+
+public class Player_Projectile : Node2D
+{
+    public Player_Projectile(Vector2 spawnPosition, Vector2 targetPosition)
+    {
+        this.AddChild(GD.Load<PackedScene>("res://Assets/Player/Projectile.tscn").Instance());
+        this.Position = spawnPosition;
+        Scene.Current.AddChild(this);
+        this.FindChild<AnimationPlayer>().Play("Spray");
+
+        var distance = targetPosition - spawnPosition;
+
+        var angle = Vector2.Right.AngleTo(distance.Normalized());
+        this.Rotation = angle;
+    }
+
+    float accumulated = 0;
+    public override void _Process(float delta)
+    {
+        if (accumulated > .5f)
+            this.QueueFree();
+        else accumulated += delta;
+
+    }
 }
