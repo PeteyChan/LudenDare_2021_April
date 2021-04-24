@@ -13,14 +13,14 @@ public class Player : RigidBody2D
         }
     }
 
-    public static Player instance {get; private set;}
+    public static Player instance { get; private set; }
 
     public static Player Spawn(Vector2 position)
     {
         var player = GD.Load<PackedScene>("res://Assets/Player/Player.tscn").Instance() as Player;
         Scene.Current.AddChild(player);
         player.GlobalPosition = position;
-        return player;        
+        return player;
     }
 
     StateMachine statemachine = new StateMachine();
@@ -35,42 +35,18 @@ public class Player : RigidBody2D
         data.Set(this as RigidBody2D)
             .Set(this.FindChild<AnimationPlayer>())
             .Set(new input())
-            .Set(new movespeed{value = 200})
+            .Set(new movespeed { value = 200 })
             .Set(this.FindChild<GunBarrel>())
             .Set(this.FindChild<Arm>())
-            .Set(new oxygen{value = 5})
+            .Set(new oxygen { value = 5 })
             ;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        Debug.Label("Depth:", ((int)Position.y) / 128 + data.Get<depth>());
         statemachine.Update(data, delta);
-
-        var crosshair = data.Get<Crosshair>();
-        var body = data.Get<Body>();
-        var inputs = data.Get<input>();
-
-        crosshair.Translate(inputs.Look);
-        var crosspos = crosshair.Position;
-        if (crosspos.x < -500) crosspos.x = -500;
-        if (crosspos.x > 500) crosspos.x = 500;
-        if (crosspos.y < -300) crosspos.y = -300;
-        if (crosspos.y > 300) crosspos.y = 300;
-        crosshair.Position = crosspos;
-
-
-        if (crosshair.Transform.origin.x < 0)
-            body.Scale = new Vector2(-1, 1);
-        else body.Scale = new Vector2(1, 1);
-
-        if (inputs.Fire)
-        {
-            var offset = data.Get<GunBarrel>().GlobalPosition - data.Get<Arm>().GlobalPosition;
-            new Player_Projectile(data.Get<GunBarrel>().GlobalPosition, data.Get<Crosshair>().GlobalPosition + offset);
-            //Debug.Log(data.Get<Crosshair>().Position, data.Get<GunBarrel>().Position);
-        }
-
     }
 
     public override void _PhysicsProcess(float delta)
@@ -94,7 +70,7 @@ public class Player : RigidBody2D
 
         InputAction fire = new InputAction(MouseList.left_click, MouseList.right_click);
 
-        public Vector2 Move => new Vector2(right - left,  down - up);
+        public Vector2 Move => new Vector2(right - left, down - up);
         public Vector2 Look => new Vector2(look_right.raw - look_left.raw, look_up.raw - look_down.raw) * look_sensitivity;
 
         public bool Fire => fire.on_pressed;
@@ -111,29 +87,29 @@ public class Player : RigidBody2D
             => value.value;
 
         public static implicit operator movespeed(float value)
-            => new movespeed{value= value};
+            => new movespeed { value = value };
     }
 
     public struct move_velocity
     {
         public Vector2 value;
-    
+
         public static implicit operator Vector2(move_velocity value)
             => value.value;
 
         public static implicit operator move_velocity(Vector2 value)
-            => new move_velocity{value = value};
+            => new move_velocity { value = value };
     }
 
     public struct environment_forces
     {
         public Vector2 value;
-    
+
         public static implicit operator Vector2(environment_forces value)
             => value.value;
 
         public static implicit operator environment_forces(Vector2 value)
-            => new environment_forces{value= value};
+            => new environment_forces { value = value };
     }
 
     public struct oxygen
@@ -144,7 +120,18 @@ public class Player : RigidBody2D
             => value.value;
 
         public static implicit operator oxygen(int value)
-            => new oxygen{value = value};
+            => new oxygen { value = value };
+    }
+
+    public struct depth
+    {
+        public int value;
+
+        public static implicit operator int(depth value)
+            => value.value;
+
+        public static implicit operator depth(int value)
+            => new depth { value = value };
     }
 }
 
@@ -161,8 +148,52 @@ namespace Player_States
         public override void OnUpdate(StateMachine stateMachine, TypeMap data, float delta, float state_time)
         {
             var inputs = data.Get<Player.input>();
+            var crosshair = data.Get<Crosshair>();
+            var body = data.Get<Body>();
+
             ref var vel = ref data.Get<Player.move_velocity>();
             vel = vel.value.lerp(inputs.Move * data.Get<Player.movespeed>(), delta);
+
+
+            crosshair.Translate(inputs.Look);
+            var crosspos = crosshair.Position;
+            if (crosspos.x < -500) crosspos.x = -500;
+            if (crosspos.x > 500) crosspos.x = 500;
+            if (crosspos.y < -300) crosspos.y = -300;
+            if (crosspos.y > 300) crosspos.y = 300;
+            crosshair.Position = crosspos;
+
+            if (crosshair.Transform.origin.x < 0)
+                body.Scale = new Vector2(-1, 1);
+            else body.Scale = new Vector2(1, 1);
+
+            if (inputs.Fire)
+            {
+                var offset = data.Get<GunBarrel>().GlobalPosition - data.Get<Arm>().GlobalPosition;
+                new Player_Projectile(data.Get<GunBarrel>().GlobalPosition, data.Get<Crosshair>().GlobalPosition + offset);
+                //Debug.Log(data.Get<Crosshair>().Position, data.Get<GunBarrel>().Position);
+            }
+
+            data.Get<Arm>().LookAt(crosshair.GlobalPosition);
+
+
+            if (data.Get<Player.oxygen>() == 0)
+                stateMachine.Change<Death>();
+        }
+    }
+
+    class Death : State
+    {
+        public override void OnEnter(StateMachine stateMachine, TypeMap data)
+        {
+            data.Get<Crosshair>().QueueFree();
+        }
+
+        public override void OnUpdate(StateMachine stateMachine, TypeMap data, float delta, float state_time)
+        {
+            data.Get<Player.move_velocity>().value.lerp(Vector2.Zero, state_time);
+            if (state_time > 1)
+                Scene.Load("res://Scenes/Main.tscn");
         }
     }
 

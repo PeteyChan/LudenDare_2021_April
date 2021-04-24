@@ -13,6 +13,7 @@ class Rock : Node2D
 
 public class Game : Node2D
 {
+
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
@@ -20,6 +21,7 @@ public class Game : Node2D
     static float block_width = 128f;
     // Called when the node enters the scene tree for the first time.
 
+    static Player player;
 
     public override void _Ready()
     {
@@ -30,7 +32,7 @@ public class Game : Node2D
         positions.Add(start);
         blocked.Add(start);
         int loop = 0;
-        
+
         while (loop < 4)// && loop < 100)
         {
             //loop++;
@@ -66,12 +68,30 @@ public class Game : Node2D
                 for(int y = -1; y < 2; ++ y)
             {
                 var ypos = position.y + y;
+                if (ypos < -100)
+                    continue;
                 if (blocked.Contains(new int2(x, ypos))) continue;
                 new Rock().GlobalPosition = new Vector2(x, -ypos) * block_width;
                 blocked.Add(new int2(x, ypos));
             }
         }
 
-        Player.Spawn(new Vector2());
+        if (!Node.IsInstanceValid(player))
+            player = Player.Spawn(new Vector2());
+        else
+        {
+            this.AddChild(player);
+            player.Position = new Vector2();
+            player.data.Get<Player.depth>() += 100;
+        }
+    }
+
+    public override void _Process(float delta)
+    {
+        if (player.Position.y > 12800)
+        {
+            this.RemoveChild(player);
+            Scene.Load("res://Scenes/Game/Game.tscn");
+        }
     }
 }
