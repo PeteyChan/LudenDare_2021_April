@@ -1,11 +1,19 @@
+using ConsoleCommands;
 using Godot;
 using System;
 
 public class Player : RigidBody2D
 {
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    class sethealth : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (instance != null)
+                instance.data.Get<oxygen>() = args.ToInt(0);
+        }
+    }
+
+    public static Player instance {get; private set;}
 
     public static Player Spawn(Vector2 position)
     {
@@ -18,9 +26,9 @@ public class Player : RigidBody2D
     StateMachine statemachine = new StateMachine();
     public TypeMap data = new TypeMap();
 
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
+    public override void _EnterTree()
     {
+        instance = this;
         Input.SetMouseMode(Input.MouseMode.Captured);
         statemachine.Change<Player_States.Move>();
 
@@ -30,12 +38,14 @@ public class Player : RigidBody2D
             .Set(new movespeed{value = 200})
             .Set(this.FindChild<GunBarrel>())
             .Set(this.FindChild<Arm>())
+            .Set(new oxygen{value = 5})
             ;
     }
 
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        Debug.Label("player oxygen", data.Get<oxygen>().value);
         statemachine.Update(data, delta);
 
         var crosshair = data.Get<Crosshair>();
@@ -118,6 +128,17 @@ public class Player : RigidBody2D
 
         public static implicit operator environment_forces(Vector2 value)
             => new environment_forces{value= value};
+    }
+
+    public struct oxygen
+    {
+        public int value;
+
+        public static implicit operator int(oxygen value)
+            => value.value;
+
+        public static implicit operator oxygen(int value)
+            => new oxygen{value = value};
     }
 }
 
