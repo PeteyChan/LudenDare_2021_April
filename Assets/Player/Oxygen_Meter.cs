@@ -23,14 +23,12 @@ public class Oxygen_Meter : Node2D
         {
             if(oxygen < count)
             {
-                Debug.Log("Removing Oxygen");
                 for(int i = count-1; i >= oxygen; -- i)
                     GetChild(i).QueueFree();
             }
 
             if(oxygen > count)
             {
-                Debug.Log("Adding Oxygen");
                 for(int i = count; i < oxygen; ++ i)
                 {
                     var node = GetOxygenPrefab();

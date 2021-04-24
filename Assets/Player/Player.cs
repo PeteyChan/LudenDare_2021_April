@@ -45,7 +45,6 @@ public class Player : RigidBody2D
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        Debug.Label("player oxygen", data.Get<oxygen>().value);
         statemachine.Update(data, delta);
 
         var crosshair = data.Get<Crosshair>();
@@ -53,6 +52,13 @@ public class Player : RigidBody2D
         var inputs = data.Get<input>();
 
         crosshair.Translate(inputs.Look);
+        var crosspos = crosshair.Position;
+        if (crosspos.x < -500) crosspos.x = -500;
+        if (crosspos.x > 500) crosspos.x = 500;
+        if (crosspos.y < -300) crosspos.y = -300;
+        if (crosspos.y > 300) crosspos.y = 300;
+        crosshair.Position = crosspos;
+
 
         if (crosshair.Transform.origin.x < 0)
             body.Scale = new Vector2(-1, 1);
