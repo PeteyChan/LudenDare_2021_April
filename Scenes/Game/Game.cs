@@ -150,7 +150,7 @@ public class Game : Node2D
         }
 
 
-        spawn_corpses(caves);
+        spawn_corpses(caves, play_area);
         spawn_edge_boundaries(minX, maxX);        
         spawn_player();
     }
@@ -178,7 +178,7 @@ public class Game : Node2D
         }
     }
 
-    void spawn_corpses(List<int2> caves)
+    void spawn_corpses(List<int2> caves, HashSet<int2> play_area)
     {
         int coprses = caves.Count.max(Rand.Int(10, 20))/2;
         HashSet<int2> spawned = new HashSet<int2>();
@@ -189,7 +189,11 @@ public class Game : Node2D
                 i--;
             else
             {
-                new Corpse().GlobalPosition = pos*block_width;
+                var corpse = new Corpse();
+                corpse.GlobalPosition = pos*block_width;
+                spawned.Add(pos);
+                if (play_area.Contains(new int2(pos.x - 1, pos.y)))
+                    corpse.Scale = new Vector2(-1, 1);
             } 
         }
 
