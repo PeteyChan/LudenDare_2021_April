@@ -1,3 +1,4 @@
+using ConsoleCommands;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -33,8 +34,8 @@ class Corpse : Node2D, Interfaces.IDamageable
     {
         if (damagable)
         {
-            this.FindChild<AnimationPlayer>().Play("Death");
             damagable = false;
+            this.FindChild<AnimationPlayer>().Play("Death");
 
             var count = Rand.Int(3) + 2;
             for(int i = 0; i < count; ++ i)
@@ -44,6 +45,14 @@ class Corpse : Node2D, Interfaces.IDamageable
                 var pos = new Vector2(Rand.Float01 * 64, Rand.Float01*32) +gpos;
                 new Oxygen_Pickup().GlobalPosition = pos;
             }
+        }
+    }
+
+    class SpawnCorpse : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            new Corpse().GlobalPosition = new Vector2(args.ToInt(0), args.ToInt(1)) * 128;
         }
     }
 }

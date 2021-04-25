@@ -244,8 +244,7 @@ public class Player_Projectile : Node2D
     public override void _Process(float delta)
     {
         if (accumulated > .5f)
-            this.QueueFree();
+            QueueFree();
         else accumulated += delta;
-
     }
 }
