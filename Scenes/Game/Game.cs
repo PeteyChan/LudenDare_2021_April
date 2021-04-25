@@ -107,7 +107,7 @@ public class Game : Node2D
                     maxX = x;
 
                 if (rocks.Contains(new int2(x, y))) continue;
-                new Rock().GlobalPosition = new Vector2(x, y) * block_width;
+                new Corals.Wall().GlobalPosition = new Vector2(x, y) * block_width;
                 rocks.Add(new int2(x, y));
             }
         }
@@ -131,7 +131,7 @@ public class Game : Node2D
                     if (obstructed)
                     {
                         obstruction_count ++;
-                        if (y == position.y-1 && x == position.x)
+                        if (y == position.y+1 && x == position.x)
                             is_grounded = true;    
                         if (y == position.y || x == position.x)
                         {
@@ -151,7 +151,8 @@ public class Game : Node2D
 
 
         spawn_corpses(caves, play_area);
-        spawn_edge_boundaries(minX, maxX);        
+        spawn_edge_boundaries(minX, maxX);
+        spawn_weeds(grounded);        
         spawn_player();
     }
 
@@ -196,7 +197,15 @@ public class Game : Node2D
                     corpse.Scale = new Vector2(-1, 1);
             } 
         }
+    }
 
+    void spawn_weeds(List<int2> grounded)
+    {
+        for(int i = 0;i < grounded.Count; ++ i)
+        {
+            if (Rand.Int(10) == 0)
+                new Corals.Weeds().GlobalPosition = grounded[i].vector2 * block_width;
+        }
     }
 
 
