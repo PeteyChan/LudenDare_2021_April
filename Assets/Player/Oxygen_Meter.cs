@@ -31,7 +31,7 @@ public class Oxygen_Meter : Node2D
         {
             if(oxygen < count)
             {
-                for(int i = count-1; i >= oxygen; -- i)
+                for(int i = count-1; i >= 0; -- i)
                     GetChild(i).QueueFree();
             }
 

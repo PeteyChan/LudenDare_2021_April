@@ -199,6 +199,12 @@ public static class NodeExtensions
         return node?.GetParent()?.FindParent<T>();
     }
 
+    public static bool TryFindParent<T>(this Node node, out T obj) where T: class
+    {
+        obj = node.FindParent<T>();
+        return Node.IsInstanceValid(obj as Node); 
+    }
+
     public static T FindChild<T>(this Node node) where T: class
     {
         if (node is T value)
@@ -211,6 +217,12 @@ public static class NodeExtensions
                 return childtype;
         }
         return null;
+    }
+
+    public static bool TryFindChild<T>(this Node node, out T obj) where T : class
+    {
+        obj = node.FindChild<T>();
+        return Node.IsInstanceValid(obj as Node);
     }
 
     public static List<T> GetAll<T>(this Node node, bool include_self = true) where T : class

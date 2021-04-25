@@ -121,7 +121,7 @@ public class Game : Node2D
             }
         }
 
-        List<int2> caves = new List<int2>(), sides = new List<int2>(), rooms = new List<int2>(), grounded = new List<int2>();
+        List<int2> caves = new List<int2>(), sides = new List<int2>(), open_areas = new List<int2>(), grounded = new List<int2>();
         foreach(var position in play_area)
         {
             int obstruction_count = 0;
@@ -153,16 +153,58 @@ public class Game : Node2D
             }
 
             if (is_grounded) grounded.Add(position);
-            if (obstruction_count == 0) rooms.Add(position);
+            if (obstruction_count == 0) open_areas.Add(position);
             if (side_count == 0) sides.Add(position);
             if (cave_count == 3 && is_grounded) caves.Add(position);
         }
 
 
+        spawn_sharks(open_areas, play_area);
         spawn_corpses(caves, play_area);
         spawn_edge_boundaries(minX, maxX);
         spawn_weeds(grounded);        
-        spawn_player();
+        //spawn_player();
+    }
+
+    void spawn_sharks(List<int2> open, HashSet<int2> play_area)
+    {
+        int sharks = open.Count.max(Rand.Int(4, 10))/2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>()/50 : 0);
+
+        HashSet<int2> spawned = new HashSet<int2>();
+
+        for (int i = 0;i < sharks; ++ i)
+        {
+            var pos = open[Rand.Int(open.Count)];
+            int minx = 0, maxX = 0;
+            int2 test = pos;
+            while(play_area.Contains(test))
+            {
+                test.x --;
+                if (spawned.Contains(test))
+                    goto skip;
+                spawned.Add(test);
+            }
+            minx = test.x++;
+            test = pos;
+            while(play_area.Contains(test))
+            {
+                test.x ++;
+                if (spawned.Contains(test))
+                    goto skip;
+                spawned.Add(test);
+            }
+            maxX = test.x--;
+
+
+            var shark = new Shark();
+            shark.GlobalPosition = pos * block_width;
+            shark.minX = minx * block_width;
+            shark.maxX = maxX * block_width;
+            shark.distance = maxX - minx;
+
+            skip:
+                continue;
+        }                
     }
 
     void spawn_player()
@@ -175,6 +217,7 @@ public class Game : Node2D
             player.Position = new Vector2();
             player.data.Get<Player.depth>() += 100;
         }
+        player.FindChild<Camera2D>().Current = true;
     }
 
     void spawn_edge_boundaries(int minX, int maxX)
@@ -217,10 +260,17 @@ public class Game : Node2D
         }
     }
 
-
+    float timer = 0;
+    bool spawned = false;
     public override void _Process(float delta)
     {
-        if (player.Position.y > 12800)
+            timer += delta;
+        if (!spawned && timer > .2f)
+        {
+            spawn_player();
+            spawned = true;
+        }
+        if (spawned && player.Position.y > 12800)
         {
             this.RemoveChild(player);
             Scene.Load("res://Scenes/Game/Game.tscn");

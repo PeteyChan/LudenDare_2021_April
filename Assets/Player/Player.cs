@@ -4,12 +4,34 @@ using System;
 
 public class Player : RigidBody2D
 {
-    class sethealth : ICommand
+    class SetHealth : ICommand
     {
         public void OnCommand(ConsoleArgs args)
         {
             if (instance != null)
                 instance.data.Get<oxygen>() = args.ToInt(0);
+        }
+    }
+
+    class SetInvincible : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (Node.IsInstanceValid(instance))
+            {
+                instance.data.Get<invincible>() = true;
+                if (args.ToFloat(0) > 2)
+                    instance.data.Get<invincible>() = new invincible{time = args.ToFloat(0)};
+            }
+        }
+    }
+
+    class SetDepth : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (Node.IsInstanceValid(instance))
+                instance.data.Get<depth>()= args.ToInt(0);
         }
     }
 
@@ -31,6 +53,8 @@ public class Player : RigidBody2D
     {
         if (data.Get<bool>()) return;
         data.Get<bool>() = true;
+
+        Debug.Log("spawned player");
 
         instance = this;
         Input.SetMouseMode(Input.MouseMode.Captured);
@@ -54,6 +78,15 @@ public class Player : RigidBody2D
     {
         Debug.Label("Depth:", ((int)Position.y) / 128 + data.Get<depth>());
         statemachine.Update(data, delta);
+
+        ref var invincible = ref data.Get<invincible>();
+
+        if (invincible)
+        {
+            invincible.time -= delta;
+            Modulate = Colors.Red.lerp(Colors.White, Mathf.Sin(invincible.time * 10f));
+        }
+        else Modulate = Colors.White;
     }
 
     public override void _PhysicsProcess(float delta)
@@ -64,12 +97,16 @@ public class Player : RigidBody2D
 
     void On_Enter_Player(Body body)
     {
-        var pickup = body.FindParent<Oxygen_Pickup>();
-        if (pickup != null)
+        if (body.TryFindParent(out Oxygen_Pickup pickup))
         {
             pickup.QueueFree();
             if (data.Get<Player.oxygen>() < 12)
                 data.Get<Player.oxygen>() ++;
+        }
+        else if (!data.Get<invincible>() && body.TryFindParent(out Shark shark))
+        {
+            data.Get<Player.oxygen>() -= 3;
+            data.Get<invincible>() = true;
         }
     }
 
@@ -151,6 +188,14 @@ public class Player : RigidBody2D
         public static implicit operator depth(int value)
             => new depth { value = value };
     }
+
+    public struct invincible
+    {
+        public float time;
+
+        public static implicit operator bool(invincible value) => value.time > 0;
+        public static implicit operator invincible(bool value) => value ? new invincible{time = 2f} : new invincible();
+    }
 }
 
 
@@ -202,7 +247,7 @@ namespace Player_States
             data.Get<Arm>().LookAt(crosshair.GlobalPosition);
 
 
-            if (data.Get<Player.oxygen>() == 0)
+            if (data.Get<Player.oxygen>() <= 0)
                 stateMachine.Change<Death>();
         }
     }

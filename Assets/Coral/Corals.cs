@@ -19,7 +19,7 @@ namespace Corals
     }
 }
 
-abstract class Prefab : Node2D
+public abstract class Prefab : Node2D
 {
     public Prefab()
     {
