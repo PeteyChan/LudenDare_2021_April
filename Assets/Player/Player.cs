@@ -13,6 +13,15 @@ public class Player : RigidBody2D
         }
     }
 
+    class StageClear : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        { 
+            if(Node.IsInstanceValid(instance))
+                instance.GlobalPosition = new Vector2(0, 128128);
+        }
+    }
+
     class SetInvincible : ICommand
     {
         public void OnCommand(ConsoleArgs args)
@@ -54,8 +63,6 @@ public class Player : RigidBody2D
         if (data.Get<bool>()) return;
         data.Get<bool>() = true;
 
-        Debug.Log("spawned player");
-
         instance = this;
         Input.SetMouseMode(Input.MouseMode.Captured);
         statemachine.Change<Player_States.Move>();
@@ -84,9 +91,14 @@ public class Player : RigidBody2D
         if (invincible)
         {
             invincible.time -= delta;
-            Modulate = Colors.Red.lerp(Colors.White, Mathf.Sin(invincible.time * 10f));
+            data.Get<Body>().Modulate = Colors.Red.lerp(Colors.White, Mathf.Sin(invincible.time * 10f));
+            this.CollisionMask = 1;
         }
-        else Modulate = Colors.White;
+        else 
+        {
+            data.Get<Body>().Modulate = Colors.White;
+            this.CollisionMask = 3;
+        }
     }
 
     public override void _PhysicsProcess(float delta)

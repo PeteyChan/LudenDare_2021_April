@@ -168,7 +168,7 @@ public class Game : Node2D
 
     void spawn_sharks(List<int2> open, HashSet<int2> play_area)
     {
-        int sharks = open.Count.max(Rand.Int(4, 10))/2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>()/50 : 0);
+        int sharks = open.Count.max(Rand.Int(10, 16))/2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>()/25 : 0);
 
         HashSet<int2> spawned = new HashSet<int2>();
 
