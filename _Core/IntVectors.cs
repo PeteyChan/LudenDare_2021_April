@@ -46,6 +46,8 @@ public struct int2: IEquatable<int2>
 
     public bool Equals(int2 other)
     => x == other.x && y == other.y;
+
+    public static implicit operator Godot.Vector2(int2 value) => new Godot.Vector2(value.x, value.y);
 }
 
 public struct int3: IEquatable<int3>

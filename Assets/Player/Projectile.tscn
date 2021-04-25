@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/Player/Player.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Player/Projectile.cs" type="Script" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 17.3218
@@ -58,6 +59,7 @@ tracks/3/keys = {
 }
 
 [node name="Projectile" type="Area2D"]
+script = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( 70.2149, 0 )
@@ -75,3 +77,4 @@ region_rect = Rect2( 149, 185, 107, 44 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Spray = SubResource( 2 )
+[connection signal="area_entered" from="." to="." method="On_Enter_Area"]
