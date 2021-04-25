@@ -1,11 +1,17 @@
 using Godot;
-using System;
+using System.Collections.Generic;
 
 public class Oxygen_Meter : Node2D
 {
-    Node2D GetOxygenPrefab()
+    class Oxygen_Symbol : Node2D
     {
-        return GD.Load<PackedScene>("res://Assets/Player/Oxygen.tscn").Instance() as Node2D;
+        public Oxygen_Symbol()
+        {
+            this.AddChild(GD.Load<PackedScene>("res://Assets/Player/Oxygen.tscn").Instance());
+            complete = Rand.Float01 + .7f;
+        }
+
+        public float timer = 0, complete;
     }
     
     Player player;
@@ -14,6 +20,8 @@ public class Oxygen_Meter : Node2D
     {
         player = this.FindParent<Player>();
     }
+
+    List<Oxygen_Symbol> pending = new List<Oxygen_Symbol>();
 
     public override void _Process(float delta)
     {
@@ -31,13 +39,38 @@ public class Oxygen_Meter : Node2D
             {
                 for(int i = count; i < oxygen; ++ i)
                 {
-                    var node = GetOxygenPrefab();
+                    var node = new Oxygen_Symbol();
+                    pending.Add(node);
                     AddChild(node);
                     node.Position = new Vector2(16f, 16f + 48f * i);
-                    node.FindChild<AnimationPlayer>().Play("Bubble");
+                    node.FindChild<AnimationPlayer>().Play("Spawn");
                 }
             }
         }
 
+        for(int i = pending.Count-1; i >= 0; --i)
+        {
+            var node = pending[i];
+            if (Node.IsInstanceValid(node))
+            {
+                node.timer += delta;
+                if (node.timer > node.complete)
+                {
+                    node.FindChild<AnimationPlayer>().Play("Bubble");
+                    pending.RemoveAt(i);
+                }
+            }
+            else pending.RemoveAt(i);
+        }
+    }
+}
+
+
+public class Oxygen_Pickup : Node2D
+{
+    public Oxygen_Pickup()
+    {
+        this.AddChild(GD.Load<PackedScene>("res://Assets/OxygenPickup/Oxygen Pickup.tscn").Instance());
+        Scene.Current.AddChild(this);
     }
 }

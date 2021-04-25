@@ -62,6 +62,17 @@ public class Player : RigidBody2D
         data.Get<environment_forces>() = new Vector2(0, 64f);
     }
 
+    void On_Enter_Player(Body body)
+    {
+        var pickup = body.FindParent<Oxygen_Pickup>();
+        if (pickup != null)
+        {
+            pickup.QueueFree();
+            if (data.Get<Player.oxygen>() < 12)
+                data.Get<Player.oxygen>() ++;
+        }
+    }
+
 
     public class input
     {
@@ -184,6 +195,7 @@ namespace Player_States
             {
                 var offset = data.Get<GunBarrel>().GlobalPosition - data.Get<Arm>().GlobalPosition;
                 new Player_Projectile(data.Get<GunBarrel>().GlobalPosition, data.Get<Crosshair>().GlobalPosition + offset);
+                data.Get<Player.oxygen>() --;
                 //Debug.Log(data.Get<Crosshair>().Position, data.Get<GunBarrel>().Position);
             }
 
@@ -200,16 +212,16 @@ namespace Player_States
         public override void OnEnter(StateMachine stateMachine, TypeMap data)
         {
             data.Get<Crosshair>().QueueFree();
+            data.Get<AnimationPlayer>().Play("Death");
         }
 
         public override void OnUpdate(StateMachine stateMachine, TypeMap data, float delta, float state_time)
         {
-            data.Get<Player.move_velocity>().value.lerp(Vector2.Zero, state_time);
-            if (state_time > 1)
+            data.Get<Player.move_velocity>() = data.Get<Player.move_velocity>().value.lerp(Vector2.Zero, state_time);
+            if (state_time > 3)
                 Scene.Load("res://Scenes/Main.tscn");
         }
     }
-
 }
 
 

@@ -1,20 +1,53 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Assets/Corpse/Corpse.png" type="Texture" id=1]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 56.4187
 
+[sub_resource type="Animation" id=2]
+resource_name = "Death"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Corpse:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1.1, 1.4, 1.7, 2 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 61.7217, 58.4425, 67.7921, 65.1968 ]
+}
+
 [node name="Corpse" type="Area2D"]
+modulate = Color( 0.364706, 0.364706, 0.364706, 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -1.02255, 5.92215 )
 shape = SubResource( 1 )
 
-[node name="Corpse" type="Sprite" parent="."]
-modulate = Color( 0.415686, 0.415686, 0.415686, 1 )
-position = Vector2( -12.7447, 20.939 )
-scale = Vector2( 0.915327, 0.915327 )
+[node name="BackLeg" type="Sprite" parent="."]
+position = Vector2( -3.53526, 45.875 )
 texture = ExtResource( 1 )
 region_enabled = true
+region_rect = Rect2( 139.564, 149.443, 54.1319, 35.6003 )
+
+[node name="Corpse" type="Sprite" parent="."]
+position = Vector2( -32.9718, 40.417 )
+scale = Vector2( 0.915327, 0.915327 )
+texture = ExtResource( 1 )
+offset = Vector2( 20, -22 )
+region_enabled = true
 region_rect = Rect2( 2, 123, 135, 134 )
+
+[node name="FrontLeg" type="Sprite" parent="."]
+position = Vector2( -15.8963, 60.4834 )
+scale = Vector2( 1, 1 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 135.665, 201.625, 69.2498, 49.2552 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Death = SubResource( 2 )

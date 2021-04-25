@@ -28,9 +28,23 @@ class Corpse : Node2D, Interfaces.IDamageable
         Scene.Current.AddChild(this);
     }
 
+    bool damagable = true;
     public void OnDamage()
     {
-        QueueFree();
+        if (damagable)
+        {
+            this.FindChild<AnimationPlayer>().Play("Death");
+            damagable = false;
+
+            var count = Rand.Int(3) + 2;
+            for(int i = 0; i < count; ++ i)
+            {
+                var gpos = GlobalPosition;
+                gpos.x -= 32;
+                var pos = new Vector2(Rand.Float01 * 64, Rand.Float01*32) +gpos;
+                new Oxygen_Pickup().GlobalPosition = pos;
+            }
+        }
     }
 }
 
@@ -135,7 +149,7 @@ public class Game : Node2D
             if (cave_count == 3 && is_grounded) caves.Add(position);
         }
 
-        
+
         spawn_corpses(caves);
         spawn_edge_boundaries(minX, maxX);        
         spawn_player();
