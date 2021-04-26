@@ -281,6 +281,13 @@ public static class NodeExtensions
         }
         return false;
     }
+
+    public static T GetRandom<T>(this List<T> list)
+    {
+        if (list == null || list.Count == 0)
+            return default;
+        return list[Rand.Int(list.Count)];
+    }
 }
 
 public static class TypeID

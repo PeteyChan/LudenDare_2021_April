@@ -4,46 +4,6 @@ using System;
 
 public class Player : RigidBody2D
 {
-    class SetHealth : ICommand
-    {
-        public void OnCommand(ConsoleArgs args)
-        {
-            if (instance != null)
-                instance.data.Get<oxygen>() = args.ToInt(0);
-        }
-    }
-
-    class StageClear : ICommand
-    {
-        public void OnCommand(ConsoleArgs args)
-        { 
-            if(Node.IsInstanceValid(instance))
-                instance.GlobalPosition = new Vector2(0, 128128);
-        }
-    }
-
-    class SetInvincible : ICommand
-    {
-        public void OnCommand(ConsoleArgs args)
-        {
-            if (Node.IsInstanceValid(instance))
-            {
-                instance.data.Get<invincible>() = true;
-                if (args.ToFloat(0) > 2)
-                    instance.data.Get<invincible>() = new invincible{time = args.ToFloat(0)};
-            }
-        }
-    }
-
-    class SetDepth : ICommand
-    {
-        public void OnCommand(ConsoleArgs args)
-        {
-            if (Node.IsInstanceValid(instance))
-                instance.data.Get<depth>()= args.ToInt(0);
-        }
-    }
-
     public static Player instance { get; private set; }
 
     public static Player Spawn(Vector2 position)
@@ -87,17 +47,14 @@ public class Player : RigidBody2D
         statemachine.Update(data, delta);
 
         ref var invincible = ref data.Get<invincible>();
-
         if (invincible)
         {
             invincible.time -= delta;
             data.Get<Body>().Modulate = Colors.Red.lerp(Colors.White, Mathf.Sin(invincible.time * 10f));
-            this.CollisionMask = 1;
         }
         else 
         {
             data.Get<Body>().Modulate = Colors.White;
-            this.CollisionMask = 3;
         }
     }
 
@@ -115,13 +72,17 @@ public class Player : RigidBody2D
             if (data.Get<Player.oxygen>() < 12)
                 data.Get<Player.oxygen>() ++;
         }
-        else if (!data.Get<invincible>() && body.TryFindParent(out Shark shark))
-        {
-            data.Get<Player.oxygen>() -= 3;
-            data.Get<invincible>() = true;
-        }
     }
 
+    public void DealDamage(int amount)
+    {
+        if (data.Get<invincible>())
+            return;
+        data.Get<Player.oxygen>() -= amount;
+        data.Get<invincible>() = true;
+    }
+
+    // player data
 
     public class input
     {
@@ -208,6 +169,47 @@ public class Player : RigidBody2D
         public static implicit operator bool(invincible value) => value.time > 0;
         public static implicit operator invincible(bool value) => value ? new invincible{time = 2f} : new invincible();
     }
+
+    // console commands
+    class SetHealth : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (instance != null)
+                instance.data.Get<oxygen>() = args.ToInt(0);
+        }
+    }
+
+    class StageClear : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        { 
+            if(Node.IsInstanceValid(instance))
+                instance.GlobalPosition = new Vector2(0, 128128);
+        }
+    }
+
+    class SetInvincible : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (Node.IsInstanceValid(instance))
+            {
+                instance.data.Get<invincible>() = true;
+                if (args.ToFloat(0) > 2)
+                    instance.data.Get<invincible>() = new invincible{time = args.ToFloat(0)};
+            }
+        }
+    }
+
+    class SetDepth : ICommand
+    {
+        public void OnCommand(ConsoleArgs args)
+        {
+            if (Node.IsInstanceValid(instance))
+                instance.data.Get<depth>()= args.ToInt(0);
+        }
+    }
 }
 
 
@@ -278,30 +280,5 @@ namespace Player_States
             if (state_time > 3)
                 Scene.Load("res://Scenes/Main.tscn");
         }
-    }
-}
-
-
-public class Player_Projectile : Node2D
-{
-    public Player_Projectile(Vector2 spawnPosition, Vector2 targetPosition)
-    {
-        this.AddChild(GD.Load<PackedScene>("res://Assets/Player/Projectile.tscn").Instance());
-        this.Position = spawnPosition;
-        Scene.Current.AddChild(this);
-        this.FindChild<AnimationPlayer>().Play("Spray");
-
-        var distance = targetPosition - spawnPosition;
-
-        var angle = Vector2.Right.AngleTo(distance.Normalized());
-        this.Rotation = angle;
-    }
-
-    float accumulated = 0;
-    public override void _Process(float delta)
-    {
-        if (accumulated > .5f)
-            QueueFree();
-        else accumulated += delta;
     }
 }

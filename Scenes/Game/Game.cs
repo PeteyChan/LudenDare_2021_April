@@ -64,10 +64,22 @@ public class Game : Node2D
 
     static Player player;
 
+    public static HashSet<int2> play_area = new HashSet<int2>();
+
+    public static List<Func<Node2D>> wall_prefabs = new List<Func<Node2D>>
+    {
+        () => new Corals.Wall()
+    };
+
+    public static List<Func<Node2D>> doodad_prefabs = new List<Func<Node2D>>
+    {
+        () => new Corals.Weeds()
+    };
+
     public override void _Ready()
     {
+        play_area.Clear();
         VisualServer.SetDefaultClearColor(Colors.Black);
-        HashSet<int2> play_area = new HashSet<int2>();
         HashSet<int2> rocks = new HashSet<int2>();
         int2 start = new int2();
         
@@ -116,8 +128,10 @@ public class Game : Node2D
                     maxX = x;
 
                 if (rocks.Contains(new int2(x, y))) continue;
-                new Corals.Wall().GlobalPosition = new Vector2(x, y) * block_width;
                 rocks.Add(new int2(x, y));
+                if (y > 100)
+                    continue;
+                wall_prefabs.GetRandom()().GlobalPosition = new Vector2(x, y) * block_width;
             }
         }
 
@@ -129,13 +143,11 @@ public class Game : Node2D
             int side_count  = 0;
             bool is_grounded = false;
 
-            if (position.y < 5)
-                continue;
-
             for(int x = position.x -1; x < position.x + 2; ++ x)
             {
                 for (int y = position.y-1; y < position.y + 2; ++ y)
                 {
+                    if (y >= 100) continue;
                     bool obstructed = !play_area.Contains(new int2(x, y));
                     if (obstructed)
                     {
@@ -153,17 +165,17 @@ public class Game : Node2D
             }
 
             if (is_grounded) grounded.Add(position);
+
+            if (position.y < 5) continue;
             if (obstruction_count == 0) open_areas.Add(position);
             if (side_count == 0) sides.Add(position);
             if (cave_count == 3 && is_grounded) caves.Add(position);
         }
 
-
         spawn_sharks(open_areas, play_area);
         spawn_corpses(caves, play_area);
         spawn_edge_boundaries(minX, maxX);
-        spawn_weeds(grounded);        
-        //spawn_player();
+        spawn_weeds(grounded);
     }
 
     void spawn_sharks(List<int2> open, HashSet<int2> play_area)
@@ -175,7 +187,6 @@ public class Game : Node2D
         for (int i = 0;i < sharks; ++ i)
         {
             var pos = open[Rand.Int(open.Count)];
-            int minx = 0, maxX = 0;
             int2 test = pos;
             while(play_area.Contains(test))
             {
@@ -184,7 +195,6 @@ public class Game : Node2D
                     goto skip;
                 spawned.Add(test);
             }
-            minx = test.x++;
             test = pos;
             while(play_area.Contains(test))
             {
@@ -193,15 +203,7 @@ public class Game : Node2D
                     goto skip;
                 spawned.Add(test);
             }
-            maxX = test.x--;
-
-
-            var shark = new Shark();
-            shark.GlobalPosition = pos * block_width;
-            shark.minX = minx * block_width;
-            shark.maxX = maxX * block_width;
-            shark.distance = maxX - minx;
-
+            new Shark().GlobalPosition = pos * block_width;
             skip:
                 continue;
         }                
@@ -253,10 +255,10 @@ public class Game : Node2D
 
     void spawn_weeds(List<int2> grounded)
     {
-        for(int i = 0;i < grounded.Count; ++ i)
+        for(int i = 0; i < grounded.Count; ++ i)
         {
-            if (Rand.Int(10) == 0)
-                new Corals.Weeds().GlobalPosition = grounded[i].vector2 * block_width;
+            if (Rand.Int(2) == 0)
+                doodad_prefabs.GetRandom()().GlobalPosition = grounded[i].vector2 * block_width;
         }
     }
 
