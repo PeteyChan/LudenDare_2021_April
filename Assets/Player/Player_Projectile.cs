@@ -3,13 +3,12 @@ using System;
 
 public class Player_Projectile : Prefab
 {
-    public override string path => "res://Assets/Player/Projectile.tscn";
+    protected override string path => "res://Assets/Player/Projectile.tscn";
     public Player_Projectile(){}
 
     public Player_Projectile(Vector2 spawnPosition, Vector2 targetPosition)
     {
         this.Position = spawnPosition;
-        Scene.Current.AddChild(this);
         this.FindChild<AnimationPlayer>().Play("Spray");
 
         var distance = targetPosition - spawnPosition;

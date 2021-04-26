@@ -23,6 +23,7 @@ tracks/0/keys = {
 
 [node name="Corpse" type="Area2D"]
 modulate = Color( 0.364706, 0.364706, 0.364706, 1 )
+z_index = -2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -1.02255, 5.92215 )
@@ -44,7 +45,6 @@ region_rect = Rect2( 2, 123, 135, 134 )
 
 [node name="FrontLeg" type="Sprite" parent="."]
 position = Vector2( -15.8963, 60.4834 )
-scale = Vector2( 1, 1 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 135.665, 201.625, 69.2498, 49.2552 )

@@ -18,6 +18,7 @@ class Depths : Node2D
     {
         this.AddChild(GD.Load<PackedScene>("res://Assets/Depths/Depths.tscn").Instance());
         Scene.Current.AddChild(this);
+        ZIndex += 100;
     }
 }
 
@@ -65,16 +66,6 @@ public class Game : Node2D
     static Player player;
 
     public static HashSet<int2> play_area = new HashSet<int2>();
-
-    public static List<Func<Node2D>> wall_prefabs = new List<Func<Node2D>>
-    {
-        () => new Corals.Wall()
-    };
-
-    public static List<Func<Node2D>> doodad_prefabs = new List<Func<Node2D>>
-    {
-        () => new Corals.Weeds()
-    };
 
     public override void _Ready()
     {
@@ -131,7 +122,9 @@ public class Game : Node2D
                 rocks.Add(new int2(x, y));
                 if (y > 100)
                     continue;
-                wall_prefabs.GetRandom()().GlobalPosition = new Vector2(x, y) * block_width;
+                var wall = Corals.Wall_Prefabs.GetRandom()();
+                wall.GlobalPosition = new Vector2(x, y) * block_width;
+                wall.ZIndex += 10;
             }
         }
 
@@ -230,6 +223,7 @@ public class Game : Node2D
             var depth = new Depths();
             depth.GlobalPosition = new Vector2(x, 0)*block_width;
             depth.Rotation = Mathf.Pi;
+
         }
     }
 
@@ -258,7 +252,7 @@ public class Game : Node2D
         for(int i = 0; i < grounded.Count; ++ i)
         {
             if (Rand.Int(2) == 0)
-                doodad_prefabs.GetRandom()().GlobalPosition = grounded[i].vector2 * block_width;
+                Corals.Doodad_Prefabs.GetRandom()().GlobalPosition = grounded[i].vector2 * block_width;
         }
     }
 

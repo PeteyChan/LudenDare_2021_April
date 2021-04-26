@@ -1,17 +1,35 @@
 using Godot;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Oxygen_Meter : Node2D
 {
-    class Oxygen_Symbol : Node2D
+    class Oxygen_Symbol : Prefab
     {
         public Oxygen_Symbol()
         {
-            this.AddChild(GD.Load<PackedScene>("res://Assets/Player/Oxygen.tscn").Instance());
-            complete = Rand.Float01 + .7f;
+            OnSpawn().StartCoroutine();
         }
 
-        public float timer = 0, complete;
+        protected override string path => "res://Assets/Player/Oxygen.tscn";
+        protected override bool auto_add_to_scene => false;
+
+        float timer = 0, complete = Rand.Float01 + .7f;
+        
+        IEnumerator OnSpawn()
+        {
+            this.FindChild<AnimationPlayer>().Play("Spawn");
+            while (timer < complete)
+            {                
+                timer += Time.frame_delta;
+                yield return null;
+            }
+            
+            if (Node.IsInstanceValid(this))
+            {
+                this.FindChild<AnimationPlayer>().Play("Bubble");
+            }
+        }
     }
     
     Player player;
@@ -21,46 +39,27 @@ public class Oxygen_Meter : Node2D
         player = this.FindParent<Player>();
     }
 
-    List<Oxygen_Symbol> pending = new List<Oxygen_Symbol>();
-
     public override void _Process(float delta)
     {
-        int oxygen = player.data.Get<Player.oxygen>();
+        int player_oxygen = player.data.Get<Player.oxygen>();
         int count = GetChildCount();
-        if (oxygen != GetChildCount())
+        if (player_oxygen != GetChildCount())
         {
-            if(oxygen < count)
+            if(player_oxygen < count)
             {
                 for(int i = count-1; i >= 0; -- i)
                     GetChild(i).QueueFree();
             }
 
-            if(oxygen > count)
+            if(player_oxygen > count)
             {
-                for(int i = count; i < oxygen; ++ i)
+                for(int i = count; i < player_oxygen; ++ i)
                 {
-                    var node = new Oxygen_Symbol();
-                    pending.Add(node);
-                    AddChild(node);
-                    node.Position = new Vector2(16f, 16f + 48f * i);
-                    node.FindChild<AnimationPlayer>().Play("Spawn");
+                    var oxygen_symbol = new Oxygen_Symbol();
+                    this.AddChild(oxygen_symbol);
+                    oxygen_symbol.Position = new Vector2(16f, 16f + 48f * i);
                 }
             }
-        }
-
-        for(int i = pending.Count-1; i >= 0; --i)
-        {
-            var node = pending[i];
-            if (Node.IsInstanceValid(node))
-            {
-                node.timer += delta;
-                if (node.timer > node.complete)
-                {
-                    node.FindChild<AnimationPlayer>().Play("Bubble");
-                    pending.RemoveAt(i);
-                }
-            }
-            else pending.RemoveAt(i);
         }
     }
 }

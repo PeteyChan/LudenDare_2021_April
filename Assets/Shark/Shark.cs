@@ -18,7 +18,7 @@ public class Shark : Prefab
         }
     }
 
-    public override string path => "res://Assets/Shark/Shark.tscn";
+    protected override string path => "res://Assets/Shark/Shark.tscn";
 
     int minX, maxX, distance;
 

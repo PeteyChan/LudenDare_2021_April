@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Assets/Coral/Coral_atlas.png" type="Texture" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Sway"
+length = 2.4
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Coral_atlas:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1.8, 2.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -14.5541, 12.9061, 0.0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Coral_atlas/Coral_atlas2:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5, 1, 1.8, 2.4 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 13.9485, 13.9485, -10.7831, -10.7831, 13.9485 ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Coral_atlas/Coral_atlas2/Coral_atlas3:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1.2, 2.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 18.4257, -9.70312, 18.4257 ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Coral_atlas/Coral_atlas2/Coral_atlas3/Coral_atlas4:rotation_degrees")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 1.2, 2.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ -16.4372, 12.0865, -16.4372 ]
+}
+
+[node name="Kelp" type="Node2D"]
+modulate = Color( 0.27451, 0.278431, 0.384314, 1 )
+
+[node name="Coral_atlas" type="Sprite" parent="."]
+position = Vector2( -0.786011, 67.4393 )
+rotation = -0.143416
+texture = ExtResource( 1 )
+offset = Vector2( 4, -40 )
+region_enabled = true
+region_rect = Rect2( 186.523, 154.886, 69.0557, 95.8478 )
+
+[node name="Coral_atlas2" type="Sprite" parent="Coral_atlas"]
+position = Vector2( -1.52588e-05, -67.6921 )
+rotation = -0.015542
+texture = ExtResource( 1 )
+offset = Vector2( 3, -14 )
+region_enabled = true
+region_rect = Rect2( 128.787, 142.434, 56.603, 41.1315 )
+
+[node name="Coral_atlas3" type="Sprite" parent="Coral_atlas/Coral_atlas2"]
+position = Vector2( 0.420441, -28.5905 )
+rotation = -0.00570446
+texture = ExtResource( 1 )
+offset = Vector2( 3, -14 )
+region_enabled = true
+region_rect = Rect2( 128.787, 142.434, 56.603, 41.1315 )
+
+[node name="Coral_atlas4" type="Sprite" parent="Coral_atlas/Coral_atlas2/Coral_atlas3"]
+position = Vector2( 0, -30.6927 )
+rotation = 0.0450054
+texture = ExtResource( 1 )
+offset = Vector2( 3, -14 )
+region_enabled = true
+region_rect = Rect2( 128.787, 142.434, 56.603, 41.1315 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Sway = SubResource( 1 )
