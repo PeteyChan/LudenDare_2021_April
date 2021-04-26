@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Assets/Player/Player.png" type="Texture" id=1]
+[ext_resource path="res://Assets/Player/557647__clagnar__schlorp.wav" type="AudioStream" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 17.3218
@@ -78,3 +79,8 @@ region_rect = Rect2( 149, 185, 107, 44 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Spray = SubResource( 2 )
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 2 )
+volume_db = -10.0
+autoplay = true

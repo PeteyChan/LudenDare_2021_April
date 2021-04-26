@@ -38,6 +38,7 @@ public class Player : RigidBody2D
             .Set(new input())
             .Set<movespeed>(200)
             .Set<oxygen>(Hardcore ? 1 : 6)
+            .Set(this.FindChild<AudioStreamPlayer>())
             ;
 
         data.Get<Crosshair>().Position= new Vector2(128, 0);
@@ -290,6 +291,7 @@ namespace Player_States
         {
             data.Get<Crosshair>().QueueFree();
             data.Get<AnimationPlayer>().Play("Death");
+            data.Get<AudioStreamPlayer>().Play();
         }
 
         public override void OnUpdate(StateMachine stateMachine, TypeMap data, float delta, float state_time)

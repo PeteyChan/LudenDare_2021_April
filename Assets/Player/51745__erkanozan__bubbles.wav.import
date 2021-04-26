@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/51745__erkanozan__bubbles.wav-6944ad4ed5c3cf69307451282028c7b1.sample"
+
+[deps]
+
+source_file="res://Assets/Player/51745__erkanozan__bubbles.wav"
+dest_files=[ "res://.import/51745__erkanozan__bubbles.wav-6944ad4ed5c3cf69307451282028c7b1.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

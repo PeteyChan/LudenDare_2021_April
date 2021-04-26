@@ -21,7 +21,7 @@ public static class Score
                 var name = items[i];
                 if (i+1 >= items.Length)
                     break;
-                int.TryParse(items[i+1], out int score);
+                int.TryParse(items[i+1].Replace("*", ""), out int score);
 
                 if (name.Contains("*"))
                     top_score_hardcore.Add((score, name.Replace("*", "")));

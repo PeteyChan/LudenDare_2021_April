@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/557647__clagnar__schlorp.wav-37353dfdbf9693cd798441f57323b766.sample"
+
+[deps]
+
+source_file="res://Assets/Player/557647__clagnar__schlorp.wav"
+dest_files=[ "res://.import/557647__clagnar__schlorp.wav-37353dfdbf9693cd798441f57323b766.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
