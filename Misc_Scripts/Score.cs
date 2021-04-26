@@ -9,11 +9,9 @@ public static class Score
     static string path = "user://save.dat";
     static Score()
     {
-        Debug.Log("Getting File");
         var file = new File();
         if (file.FileExists(path) && Error.Ok == file.Open(path, File.ModeFlags.Read))
         {
-            Debug.Log("Success");
             var data = file.GetAsText();
 
             var items = data.Split(',');
