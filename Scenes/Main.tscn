@@ -2,35 +2,45 @@
 
 [ext_resource path="res://Scenes/Game/StartGame.cs" type="Script" id=1]
 [ext_resource path="res://Scenes/Button2.cs" type="Script" id=2]
-[ext_resource path="res://Scenes/Button3.cs" type="Script" id=3]
+[ext_resource path="res://Assets/Title Screen Art/FarDown Title Coloured.png" type="Texture" id=3]
 
-[node name="Main" type="CanvasLayer"]
+[node name="Main" type="Node2D"]
 
 [node name="Control" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+margin_left = 319.816
+margin_top = 130.354
+margin_right = 437.816
+margin_bottom = 162.354
+rect_scale = Vector2( 4.07692, 3.94444 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="Control"]
-anchor_left = 0.3
-anchor_top = 0.3
-anchor_right = 0.7
-anchor_bottom = 0.4
-text = "This is the Game"
-align = 1
+[node name="TextureRect" type="TextureRect" parent="Control"]
+anchor_left = -0.689
+anchor_top = -1.107
+anchor_right = 1.488
+anchor_bottom = 3.781
+margin_left = 0.146927
+margin_top = 0.529728
+margin_right = 1805.26
+margin_bottom = 956.114
+grow_horizontal = 2
+grow_vertical = 2
+rect_scale = Vector2( 0.132, 0.15 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 3 )
+stretch_mode = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Button" type="Button" parent="Control"]
-anchor_left = 0.4
-anchor_top = 0.4
-anchor_right = 0.6
-anchor_bottom = 0.5
+margin_left = 18.8901
+margin_top = 60.7211
+margin_right = 59.8901
+margin_bottom = 80.7211
 text = "Start"
 script = ExtResource( 1 )
 __meta__ = {
@@ -38,20 +48,69 @@ __meta__ = {
 }
 
 [node name="Button2" type="Button" parent="Control"]
-anchor_left = 0.4
-anchor_top = 0.5
-anchor_right = 0.6
-anchor_bottom = 0.6
+margin_left = -1.68192
+margin_top = 95.5697
+margin_right = 81.3181
+margin_bottom = 115.57
 text = "Hardcore"
 script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Button3" type="Button" parent="Control"]
-anchor_left = 0.4
-anchor_top = 0.6
-anchor_right = 0.6
-anchor_bottom = 0.7
-text = "Quit"
-script = ExtResource( 3 )
+[node name="Label" type="Label" parent="Control"]
+margin_left = 68.4647
+margin_top = 69.5876
+margin_right = 200.465
+margin_bottom = 88.5876
+rect_scale = Vector2( 0.3, 0.3 )
+text = "Start a regular game."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label4" type="Label" parent="Control"]
+anchor_left = 1.29312e-07
+anchor_top = -0.00419211
+anchor_bottom = 0.370808
+margin_left = 144.367
+margin_top = -30.6889
+margin_right = 282.367
+margin_bottom = -11.6889
+rect_scale = Vector2( 0.18, 0.18 )
+text = "Made by Peteychan &
+StinkoSupreme"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="Control"]
+margin_left = 86.9646
+margin_top = 100.777
+margin_right = 303.965
+margin_bottom = 148.777
+rect_scale = Vector2( 0.3, 0.3 )
+text = "Hardcore mode gives you only
+1 air bubble. So you can't attack 
+and being hit by anything kills you."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label3" type="Label" parent="Control"]
+margin_left = -70.2889
+margin_top = 74.7235
+margin_right = 219.711
+margin_bottom = 207.724
+rect_scale = Vector2( 0.3, 0.3 )
+text = "Controls
+
+Mouse - Aim and change 
+horizontal direction
+
+Mouse Button - Shoot
+
+WASD - Movement"
+__meta__ = {
+"_edit_use_anchors_": false
+}
