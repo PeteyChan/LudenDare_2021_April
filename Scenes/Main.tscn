@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/Game/StartGame.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/Button2.cs" type="Script" id=2]
 
 [node name="Main" type="Node2D"]
 
@@ -29,6 +30,17 @@ margin_right = 73.4489
 margin_bottom = 47.1504
 text = "Start"
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="Control"]
+margin_left = 14.5382
+margin_top = 60.5529
+margin_right = 97.5382
+margin_bottom = 80.5529
+text = "Hardcore"
+script = ExtResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

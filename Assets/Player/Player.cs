@@ -4,6 +4,7 @@ using System;
 
 public class Player : RigidBody2D
 {
+    public static bool Hardcore;
     public static Player instance { get; private set; }
 
     public static Player Spawn(Vector2 position)
@@ -34,7 +35,7 @@ public class Player : RigidBody2D
             .Set(this.FindChild<Arm>())
             .Set(new input())
             .Set<movespeed>(200)
-            .Set<oxygen>(5)
+            .Set<oxygen>(Hardcore ? 1 : 6)
             ;
 
         data.Get<Crosshair>().Position= new Vector2(128, 0);
