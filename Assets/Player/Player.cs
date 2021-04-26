@@ -87,6 +87,7 @@ public class Player : RigidBody2D
     {
         if (body.TryFindParent(out Oxygen_Pickup pickup))
         {
+            this.FindChild<BubbleCollection>().Play();
             pickup.QueueFree();
             if (data.Get<Player.oxygen>() < 12)
                 data.Get<Player.oxygen>() ++;
@@ -99,6 +100,7 @@ public class Player : RigidBody2D
             return;
         data.Get<Player.oxygen>() -= amount;
         data.Get<invincible>() = true;
+        this.FindChild<PlayerDamage>().Play();
     }
 
     // player data
