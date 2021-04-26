@@ -39,11 +39,11 @@ class Corpse : Node2D, Interfaces.IDamageable
             this.FindChild<AnimationPlayer>().Play("Death");
 
             var count = Rand.Int(3) + 2;
-            for(int i = 0; i < count; ++ i)
+            for (int i = 0; i < count; ++i)
             {
                 var gpos = GlobalPosition;
                 gpos.x -= 32;
-                var pos = new Vector2(Rand.Float01 * 64, Rand.Float01*32) +gpos;
+                var pos = new Vector2(Rand.Float01 * 64, Rand.Float01 * 32) + gpos;
                 new Oxygen_Pickup().GlobalPosition = pos;
             }
         }
@@ -73,7 +73,7 @@ public class Game : Node2D
         VisualServer.SetDefaultClearColor(Colors.Black);
         HashSet<int2> rocks = new HashSet<int2>();
         int2 start = new int2();
-        
+
         play_area.Add(start);
         rocks.Add(start);
         int loop = 0;
@@ -111,48 +111,48 @@ public class Game : Node2D
         foreach (var position in play_area)
         {
             for (int x = position.x - 5; x < position.x + 6; ++x)
-                for(int y = position.y -1; y < position.y + 2; ++ y)
-            {
-                if (x < minX)
-                    minX = x;
-                if (x > maxX)
-                    maxX = x;
+                for (int y = position.y - 1; y < position.y + 2; ++y)
+                {
+                    if (x < minX)
+                        minX = x;
+                    if (x > maxX)
+                        maxX = x;
 
-                if (rocks.Contains(new int2(x, y))) continue;
-                rocks.Add(new int2(x, y));
-                if (y > 100)
-                    continue;
-                var wall = Corals.Wall_Prefabs.GetRandom()();
-                wall.GlobalPosition = new Vector2(x, y) * block_width;
-                wall.ZIndex += 10;
-            }
+                    if (rocks.Contains(new int2(x, y))) continue;
+                    rocks.Add(new int2(x, y));
+                    if (y > 100)
+                        continue;
+                    var wall = Corals.Wall_Prefabs.GetRandom()();
+                    wall.GlobalPosition = new Vector2(x, y) * block_width;
+                    wall.ZIndex += 10;
+                }
         }
 
         List<int2> caves = new List<int2>(), sides = new List<int2>(), open_areas = new List<int2>(), grounded = new List<int2>();
-        foreach(var position in play_area)
+        foreach (var position in play_area)
         {
             int obstruction_count = 0;
             int cave_count = 0;
-            int side_count  = 0;
+            int side_count = 0;
             bool is_grounded = false;
 
-            for(int x = position.x -1; x < position.x + 2; ++ x)
+            for (int x = position.x - 1; x < position.x + 2; ++x)
             {
-                for (int y = position.y-1; y < position.y + 2; ++ y)
+                for (int y = position.y - 1; y < position.y + 2; ++y)
                 {
                     if (y >= 100) continue;
                     bool obstructed = !play_area.Contains(new int2(x, y));
                     if (obstructed)
                     {
-                        obstruction_count ++;
-                        if (y == position.y+1 && x == position.x)
-                            is_grounded = true;    
+                        obstruction_count++;
+                        if (y == position.y + 1 && x == position.x)
+                            is_grounded = true;
                         if (y == position.y || x == position.x)
                         {
-                            cave_count ++;
+                            cave_count++;
                         }
                         if (y == position.x)
-                            side_count ++;
+                            side_count++;
                     }
                 }
             }
@@ -165,41 +165,61 @@ public class Game : Node2D
             if (cave_count == 3 && is_grounded) caves.Add(position);
         }
 
+        spawn_spikes(grounded);
         spawn_sharks(open_areas, play_area);
         spawn_corpses(caves, play_area);
         spawn_edge_boundaries(minX, maxX);
         spawn_weeds(grounded);
     }
 
+    void spawn_spikes(List<int2> grounded)
+    {
+        int spikes = grounded.Count.max(Rand.Int(24, 36)) / 2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>() / 25 : 0);
+        HashSet<int2> spawned = new HashSet<int2>();
+
+        for (int i = 0; i < spikes; ++i)
+        {
+            var pos = grounded.GetRandom();
+            if (pos.y < 5) continue;
+            if (spawned.Contains(pos)) continue;
+            spawned.Add(pos);
+            if (play_area.Contains(new int2(pos.x, pos.y - 1)))
+            {
+                var spike = new TentacleSpike();
+                spike.Position = pos * block_width;
+            }
+        }
+    }
+
     void spawn_sharks(List<int2> open, HashSet<int2> play_area)
     {
-        int sharks = open.Count.max(Rand.Int(10, 16))/2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>()/25 : 0);
+        int sharks = open.Count.max(Rand.Int(10, 16)) / 2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>() / 25 : 0);
 
         HashSet<int2> spawned = new HashSet<int2>();
 
-        for (int i = 0;i < sharks; ++ i)
+        for (int i = 0; i < sharks; ++i)
         {
             var pos = open[Rand.Int(open.Count)];
             int2 test = pos;
-            while(play_area.Contains(test))
+            while (play_area.Contains(test))
             {
-                test.x --;
+                test.x--;
                 if (spawned.Contains(test))
                     goto skip;
                 spawned.Add(test);
             }
             test = pos;
-            while(play_area.Contains(test))
+            while (play_area.Contains(test))
             {
-                test.x ++;
+                test.x++;
                 if (spawned.Contains(test))
                     goto skip;
                 spawned.Add(test);
             }
             new Shark().GlobalPosition = pos * block_width;
-            skip:
-                continue;
-        }                
+        skip:
+            continue;
+        }
     }
 
     void spawn_player()
@@ -217,11 +237,11 @@ public class Game : Node2D
 
     void spawn_edge_boundaries(int minX, int maxX)
     {
-        for(int x = minX; x < maxX; ++ x)
+        for (int x = minX; x < maxX; ++x)
         {
-            new Depths().GlobalPosition = new Vector2(x, 100)*block_width;
+            new Depths().GlobalPosition = new Vector2(x, 100) * block_width;
             var depth = new Depths();
-            depth.GlobalPosition = new Vector2(x, 0)*block_width;
+            depth.GlobalPosition = new Vector2(x, 0) * block_width;
             depth.Rotation = Mathf.Pi;
 
         }
@@ -229,27 +249,27 @@ public class Game : Node2D
 
     void spawn_corpses(List<int2> caves, HashSet<int2> play_area)
     {
-        int coprses = caves.Count.max(Rand.Int(10, 20))/2;
+        int coprses = caves.Count.max(Rand.Int(10, 20)) / 2;
         HashSet<int2> spawned = new HashSet<int2>();
-        for(int i = 0; i < coprses; ++ i)
+        for (int i = 0; i < coprses; ++i)
         {
-            var pos = caves[Rand.Int(caves.Count)];            
+            var pos = caves[Rand.Int(caves.Count)];
             if (spawned.Contains(pos))
                 i--;
             else
             {
                 var corpse = new Corpse();
-                corpse.GlobalPosition = pos*block_width;
+                corpse.GlobalPosition = pos * block_width;
                 spawned.Add(pos);
                 if (play_area.Contains(new int2(pos.x - 1, pos.y)))
                     corpse.Scale = new Vector2(-1, 1);
-            } 
+            }
         }
     }
 
     void spawn_weeds(List<int2> grounded)
     {
-        for(int i = 0; i < grounded.Count; ++ i)
+        for (int i = 0; i < grounded.Count; ++i)
         {
             if (Rand.Int(2) == 0)
                 Corals.Doodad_Prefabs.GetRandom()().GlobalPosition = grounded[i].vector2 * block_width;
@@ -260,7 +280,7 @@ public class Game : Node2D
     bool spawned = false;
     public override void _Process(float delta)
     {
-            timer += delta;
+        timer += delta;
         if (!spawned && timer > .2f)
         {
             spawn_player();
