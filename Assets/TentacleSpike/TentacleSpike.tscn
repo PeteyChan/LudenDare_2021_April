@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Assets/TentacleSpike/Tentacle_rock creature with spike.png" type="Texture" id=2]
 
@@ -103,14 +103,57 @@ tracks/7/keys = {
 "values": [ 0.0, 0.0, -4.40471, 7.04666, 0.0 ]
 }
 
+[sub_resource type="Animation" id=4]
+resource_name = "Death"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Node2D/Body:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 0.0784314, 0.0784314, 0.0784314, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Node2D/Body:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.3, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ), Vector2( 0, 0 ), Vector2( -10.715, 29.3669 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Node2D/Body:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 1 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 21.0707, -20.9496, 33.5427, 23.3748 ]
+}
+
 [sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 10, 40 )
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 28.9528
 
 [node name="TentacleSpike" type="Node2D"]
 modulate = Color( 0.403922, 0.403922, 0.403922, 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/Attack = SubResource( 1 )
+anims/Death = SubResource( 4 )
 
 [node name="Node2D" type="Node2D" parent="."]
 position = Vector2( 0, 64.1447 )
@@ -138,6 +181,7 @@ region_enabled = true
 region_rect = Rect2( 1.78949, 84.5789, 173.684, 164.211 )
 
 [node name="Attacker" type="Area2D" parent="Node2D"]
+visible = false
 monitoring = false
 monitorable = false
 collision_layer = 2
@@ -146,3 +190,11 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Attacker"]
 position = Vector2( 0, -34.9233 )
 shape = SubResource( 2 )
+
+[node name="Area2D" type="Area2D" parent="Node2D"]
+visible = false
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Area2D"]
+position = Vector2( -1.33636, -34.7451 )
+shape = SubResource( 3 )

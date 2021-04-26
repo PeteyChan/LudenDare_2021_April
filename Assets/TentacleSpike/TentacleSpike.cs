@@ -2,7 +2,7 @@ using ConsoleCommands;
 using Godot;
 using System.Collections;
 
-public class TentacleSpike : Prefab
+public class TentacleSpike : Prefab, Interfaces.IDamageable
 {
     protected override string path => "res://Assets/TentacleSpike/TentacleSpike.tscn";
 
@@ -21,7 +21,8 @@ public class TentacleSpike : Prefab
             timer += Time.frame_delta;
             yield return null;
         }
-        this.FindChild<AnimationPlayer>().Play("Attack");
+        if (!dead)
+            this.FindChild<AnimationPlayer>().Play("Attack");
     }
 
     void On_Enter_Area(Node body)
@@ -29,6 +30,17 @@ public class TentacleSpike : Prefab
         if (body.TryFindParent(out Player player))
         {
             player.DealDamage(1);
+        }
+    }
+
+    bool dead;
+    public void OnDamage()
+    {
+        if (!dead)
+        {
+            dead = true;
+            this.FindChild<AnimationPlayer>().Play("Death");
+            this.FindChild<Area2D>().Monitoring = false;
         }
     }
 
