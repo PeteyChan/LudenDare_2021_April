@@ -14,7 +14,6 @@ namespace Corals
         {
             this.FindChild<AnimationPlayer>().Play("Sway");
         }
-
         public override string path => "res://Assets/Coral/Weeds.tscn";
     }
 }
