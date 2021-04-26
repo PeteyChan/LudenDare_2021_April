@@ -4,6 +4,7 @@ using System;
 
 public class Player : RigidBody2D
 {
+    public static int score;
     public static bool Hardcore;
     public static Player instance { get; private set; }
 
@@ -18,6 +19,7 @@ public class Player : RigidBody2D
     StateMachine statemachine = new StateMachine();
     public TypeMap data = new TypeMap();
 
+    float time_after_pause;
 
     public override void _EnterTree()
     {
@@ -41,11 +43,26 @@ public class Player : RigidBody2D
         data.Get<Crosshair>().Position= new Vector2(128, 0);
     }
 
+    InputAction pause = new InputAction(KeyList.Escape);
+
     //  // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
-        Debug.Label("Depth:", ((int)Position.y) / 128 + data.Get<depth>());
+        time_after_pause += delta;
+        if (time_after_pause < .2f) return;
+
+        score = ((int)Position.y) / 128 + data.Get<depth>();
+        Debug.Label("Depth:", score);
+
         statemachine.Update(data, delta);
+
+        if (pause && !GetTree().Paused)
+        {
+            time_after_pause = 0;
+            var menu = new Pause_Menu();
+            this.FindChild<Control>().AddChild(menu);
+            menu.SetPosition(new Vector2(0, 0));
+        }
 
         ref var invincible = ref data.Get<invincible>();
         if (invincible)
@@ -279,7 +296,7 @@ namespace Player_States
         {
             data.Get<Player.move_velocity>() = data.Get<Player.move_velocity>().value.lerp(Vector2.Zero, state_time);
             if (state_time > 3)
-                Scene.Load("res://Scenes/Main.tscn");
+                Scene.Load("res://Assets/GameOverScene/GameOver.tscn");
         }
     }
 }

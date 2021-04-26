@@ -210,6 +210,15 @@ script = ExtResource( 3 )
 [node name="OxygenMeter" type="Node2D" parent="CanvasLayer"]
 script = ExtResource( 7 )
 
+[node name="Control" type="Control" parent="CanvasLayer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Light2D" type="Light2D" parent="."]
 position = Vector2( 3.05176e-05, -3.05176e-05 )
 scale = Vector2( 2.89606, 2.89606 )

@@ -1,0 +1,144 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/Player/Background.png" type="Texture" id=1]
+[ext_resource path="res://Assets/GameOverScene/DisplayScores.cs" type="Script" id=2]
+[ext_resource path="res://Assets/GameOverScene/ShowScoreInput.cs" type="Script" id=3]
+[ext_resource path="res://Assets/GameOverScene/ScoreLabel.cs" type="Script" id=4]
+[ext_resource path="res://Assets/GameOverScene/BackToMain.cs" type="Script" id=5]
+
+[node name="Control" type="CanvasLayer"]
+layer = 0
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -40.0
+margin_bottom = 384.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture = ExtResource( 1 )
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Scores" type="Control" parent="Control"]
+anchor_left = 0.5
+anchor_top = 0.1
+anchor_right = 0.9
+anchor_bottom = 0.9
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label2" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label3" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label4" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label5" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label6" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label7" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label8" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label9" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Label10" type="Label" parent="Control/Scores"]
+anchor_right = 1.0
+text = "Score Goes Here"
+
+[node name="Score Input" type="Control" parent="Control"]
+anchor_left = 0.1
+anchor_top = 0.2
+anchor_right = 0.4
+anchor_bottom = 0.3
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control/Score Input"]
+anchor_right = 1.0
+anchor_bottom = 0.3
+text = "High Score"
+align = 1
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextEdit" type="TextEdit" parent="Control/Score Input"]
+anchor_top = 0.3
+anchor_right = 1.0
+anchor_bottom = 0.6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Submit" type="Button" parent="Control/Score Input"]
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Submit"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Control"]
+anchor_left = 0.1
+anchor_top = 0.85
+anchor_right = 0.4
+anchor_bottom = 0.9
+text = "Return to Main"
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Control"]
+anchor_left = 0.1
+anchor_top = 0.1
+anchor_right = 0.4
+anchor_bottom = 0.1
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Game Over"
+align = 1

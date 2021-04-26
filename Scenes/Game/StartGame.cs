@@ -14,7 +14,7 @@ public class StartGame : Button
     public override void _Process(float delta)
     {
         if (test)
-            Input.SetMouseMode(Input.MouseMode.Confined);
+            Input.SetMouseMode(Input.MouseMode.Visible);
         if (test && Pressed)
         {
             test = false;
