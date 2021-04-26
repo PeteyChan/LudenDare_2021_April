@@ -65,11 +65,7 @@ public class Oxygen_Meter : Node2D
 }
 
 
-public class Oxygen_Pickup : Node2D
+public class Oxygen_Pickup : Prefab
 {
-    public Oxygen_Pickup()
-    {
-        this.AddChild(GD.Load<PackedScene>("res://Assets/OxygenPickup/Oxygen Pickup.tscn").Instance());
-        Scene.Current.AddChild(this);
-    }
+    protected override string path => "res://Assets/OxygenPickup/Oxygen Pickup.tscn";
 }

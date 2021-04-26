@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Assets/Coral/Coral_atlas.png" type="Texture" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 64, 64 )
+
+[sub_resource type="OccluderPolygon2D" id=2]
+polygon = PoolVector2Array( -21.8183, -65.5003, -11.807, -72.8419, -0.127169, -67.1688, 7.88188, -72.8419, 13.2212, -79.1824, 32.2427, -82.1858, 47.2596, -80.5172, 71.2868, -74.8442, 72.9553, -50.817, 70.2856, -31.4619, 62.6103, -20.1157, 58.2721, -6.09991, 57.6047, 8.91704, 67.616, 13.589, 65.6137, 30.2745, 52.9327, 43.2892, 48.2608, 48.9622, 26.5696, 46.2925, -10.8059, 58.3061, -35.5004, 45.9588, -58.1927, 20.9306, -50.8511, -0.426845, -60.195, -5.7662, -64.8669, -25.7888, -63.5321, -36.8012, -60.195, -42.1406, -64.5332, -53.4867, -63.5321, -65.5003, -45.5117, -70.8396 )
+
+[node name="Coral_Wall" type="Node2D"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource( 1 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="RigidBody2D"]
+position = Vector2( -5.07321, 12.1687 )
+occluder = SubResource( 2 )
+
+[node name="Coral_atlas" type="Sprite" parent="."]
+modulate = Color( 0.298039, 0.298039, 0.298039, 1 )
+position = Vector2( 2.6177, -1.05368 )
+scale = Vector2( 1.26773, 1.26773 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 2.34845, 385.2, 126.796, 124.45 )

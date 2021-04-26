@@ -194,9 +194,13 @@ public static class NodeExtensions
 {
     public static T FindParent<T>(this Node node) where T: class
     {
+        if (!Node.IsInstanceValid(node))
+            return null;
+
         if (node is T value)
             return value;
-        return node?.GetParent()?.FindParent<T>();
+
+        return node.GetParent().FindParent<T>();
     }
 
     public static bool TryFindParent<T>(this Node node, out T obj) where T: class
@@ -207,6 +211,9 @@ public static class NodeExtensions
 
     public static T FindChild<T>(this Node node) where T: class
     {
+        if (!Node.IsInstanceValid(node))
+            return null;
+
         if (node is T value)
             return value;
         

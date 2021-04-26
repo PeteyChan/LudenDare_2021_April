@@ -11,13 +11,11 @@ public class StartGame : Button
 
     bool test = true;
     
-    InputAction start = new InputAction(KeyList.Enter);
-
     public override void _Process(float delta)
     {
         if (test)
             Input.SetMouseMode(Input.MouseMode.Confined);
-        if (test && (Pressed || start))
+        if (test && Pressed)
         {
             test = false;
             Scene.Load("res://Scenes/Game/Game.tscn");

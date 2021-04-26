@@ -165,11 +165,27 @@ public class Game : Node2D
             if (cave_count == 3 && is_grounded) caves.Add(position);
         }
 
+        spawn_puffers(grounded);
         spawn_spikes(grounded);
         spawn_sharks(open_areas, play_area);
         spawn_corpses(caves, play_area);
         spawn_edge_boundaries(minX, maxX);
         spawn_weeds(grounded);
+    }
+
+    void spawn_puffers(List<int2> grounded)
+    {
+        HashSet<int2> spawned = new HashSet<int2>();
+        int count = grounded.Count.max(Rand.Int(24, 36)) / 2 + (Node.IsInstanceValid(player) ? player.data.Get<Player.depth>() / 25 : 0);
+        for(int i = 0;i < count; ++ i)
+        {
+            var pos = grounded.GetRandom();
+            if (spawned.Contains(pos))
+                continue;
+            
+            spawned.Add(pos);
+            new Pufferfish().GlobalPosition = pos * block_width;
+        }
     }
 
     void spawn_spikes(List<int2> grounded)

@@ -21,15 +21,16 @@ public class TentacleSpike : Prefab, Interfaces.IDamageable
             timer += Time.frame_delta;
             yield return null;
         }
+// 
         if (!dead)
-            this.FindChild<AnimationPlayer>().Play("Attack");
+            this.FindChild<AnimationPlayer>()?.Play("Attack");
     }
 
     void On_Enter_Area(Node body)
     {
         if (body.TryFindParent(out Player player))
         {
-            player.DealDamage(1);
+            player.DealDamage(2);
         }
     }
 

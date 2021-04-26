@@ -1,0 +1,147 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Assets/PufferFish/PufferFish.png" type="Texture" id=1]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Attack"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("Body:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.4, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0.294712, 0.294712 ), Vector2( 0.454712, 0.174712 ), Vector2( 0.454712, 0.534712 ), Vector2( 0.224334, 0.239396 ), Vector2( 0.294712, 0.294712 ) ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "Death"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("Body/PufferFish:rotation_degrees")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -170.293, -170.293 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Body/PufferFish:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 0.0941176, 0.0941176, 0.0941176, 1 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "Swim"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Body/PufferFish/Tail:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false, true ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Body/PufferFish/Tail2:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.4 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Body/PufferFish/Tail3:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ false, true, false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Body/PufferFish:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.1, 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1, 1 ), Vector2( 0.96, 1.16 ), Vector2( 1.05143, 0.994286 ), Vector2( 1, 1 ) ]
+}
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 32.7679
+
+[node name="PufferFish" type="Node2D"]
+modulate = Color( 0.266667, 0.266667, 0.266667, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Attack = SubResource( 4 )
+anims/Death = SubResource( 2 )
+anims/Swim = SubResource( 1 )
+
+[node name="Body" type="Node2D" parent="."]
+scale = Vector2( 0.294712, 0.294712 )
+
+[node name="PufferFish" type="Sprite" parent="Body"]
+position = Vector2( 6.01285, -1.08841 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( -7.4678, 71.3123, 189.474, 184.211 )
+
+[node name="Tail" type="Sprite" parent="Body/PufferFish"]
+position = Vector2( 102.57, -9.92989 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 182.385, 149.202, 66.342, 103.354 )
+
+[node name="Tail2" type="Sprite" parent="Body/PufferFish"]
+visible = false
+position = Vector2( 94.6523, -11.9613 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 221.491, 3.94909, 39.8052, 102.656 )
+
+[node name="Tail3" type="Sprite" parent="Body/PufferFish"]
+visible = false
+position = Vector2( 88.0003, -23.7253 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 185.178, -1.6376, 31.4252, 101.957 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( -0.793701, 4.35004 )
+scale = Vector2( 0.566123, 0.566123 )
+shape = SubResource( 3 )

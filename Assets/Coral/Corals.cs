@@ -8,7 +8,8 @@ class Corals
     {
         () => new Wall(),
         () => new Wall2(),
-        () => new Wall3()
+        () => new Wall3(),
+        () => new Wall4()
     };
 
     public static List<Func<Node2D>> Doodad_Prefabs = new List<Func<Node2D>>
@@ -31,6 +32,11 @@ class Corals
     class Wall3 : Prefab
     {
         protected override string path => "res://Assets/Coral/Coral_Wall_3.tscn";
+    }
+
+    class Wall4 : Prefab
+    {
+        protected override string path => "res://Assets/Coral/Coral_Wall_4.tscn";
     }
 
     class Weeds : Prefab
