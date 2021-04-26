@@ -56,7 +56,7 @@ tracks/3/keys = {
 }
 
 [node name="Kelp" type="Node2D"]
-modulate = Color( 0.27451, 0.278431, 0.384314, 1 )
+modulate = Color( 0.160784, 0.164706, 0.203922, 1 )
 
 [node name="Coral_atlas" type="Sprite" parent="."]
 position = Vector2( -0.786011, 67.4393 )

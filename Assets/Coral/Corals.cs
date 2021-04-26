@@ -14,7 +14,8 @@ class Corals
     public static List<Func<Node2D>> Doodad_Prefabs = new List<Func<Node2D>>
     {
         () => new Weeds(),
-        () => new Kelp()
+        () => new Kelp(),
+        () => new Branch_coral()
     };
 
     class Wall : Prefab
@@ -48,6 +49,11 @@ class Corals
             this.FindChild<AnimationPlayer>().Play("Sway");
         }
         protected override string path => "res://Assets/Coral/Weeds_2.tscn";
+    }
+
+    class Branch_coral : Prefab
+    {
+        protected override string path => "res://Assets/Coral/Branch_coral.tscn";
     }
 }
 
