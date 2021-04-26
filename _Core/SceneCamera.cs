@@ -7,13 +7,20 @@ namespace _Core
 {
     class Scenecamera2D : ICommand, IUpdater
     {
-        Camera2D camera;
+        Camera2D camera, previous;
         public void OnCommand(ConsoleArgs args)
         {
             if (Node.IsInstanceValid(camera))
+            {
+                if (Node.IsInstanceValid(previous))
+                    previous.Current= true;
                 camera.QueueFree();
+            }
             else
             {
+                foreach(var cam in Scene.Current.GetAll<Camera2D>())
+                    if (cam.Current) previous = cam;
+                
                 camera = new Camera2D();
                 Scene.Current.AddChild(camera);
                 this.StartUpdates();
@@ -36,13 +43,13 @@ namespace _Core
         {
             float speed = 128;
             if (fast.pressed)
-                speed *= 10f;
+                speed *= 20f;
             if (slow.pressed)
                 speed *= .2f;
             if (zoom_in.pressed)
-                camera.Zoom -= Vector2.One * delta;
+                camera.Zoom -= Vector2.One * delta * (speed / 100f);
             if (zoom_out.pressed)
-                camera.Zoom += Vector2.One * delta;
+                camera.Zoom += Vector2.One * delta * (speed / 100f);
 
             Vector2 moveVector = new Vector2(left - right, up - down) * speed;        
             velocity = velocity.lerp(moveVector * Time.frame_delta, Time.frame_delta * 10f);

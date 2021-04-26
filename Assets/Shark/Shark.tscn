@@ -85,11 +85,11 @@ tracks/5/keys = {
 [node name="Shark" type="Node2D"]
 
 [node name="Node2D" type="Node2D" parent="."]
-scale = Vector2( 1.10552, 0.918728 )
+scale = Vector2( 1.07039, 0.945791 )
 
 [node name="Jaw" type="Sprite" parent="Node2D"]
 position = Vector2( 26.2748, 32.1702 )
-rotation = -0.426437
+rotation = -0.493655
 texture = ExtResource( 1 )
 offset = Vector2( -24, -8 )
 region_enabled = true
@@ -124,7 +124,7 @@ region_rect = Rect2( 109.012, 127.553, 53.6617, 117.615 )
 [node name="Pectrol" type="Sprite" parent="Node2D"]
 position = Vector2( 51.8427, 29.1972 )
 rotation = -0.230047
-scale = Vector2( 1, 1.21798 )
+scale = Vector2( 1, 1.14539 )
 texture = ExtResource( 1 )
 offset = Vector2( 8, 12 )
 region_enabled = true

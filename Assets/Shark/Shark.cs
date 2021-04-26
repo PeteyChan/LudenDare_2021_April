@@ -22,7 +22,7 @@ public class Shark : Prefab
 
     int minX, maxX, distance;
 
-    float timer = 0, swimspeed = 5, prevx = 0;
+    float timer = Rand.Float01 * 5f, swimspeed = 5, prevx = 0;
 
     int last_y = 0;
 
