@@ -180,7 +180,7 @@ public class Game : Node2D
         for(int i = 0;i < count; ++ i)
         {
             var pos = grounded.GetRandom();
-            if (spawned.Contains(pos))
+            if (spawned.Contains(pos) || pos.y < 5)
                 continue;
             
             spawned.Add(pos);
